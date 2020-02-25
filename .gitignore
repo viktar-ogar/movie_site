@@ -4,3 +4,8 @@
 __pycache__
 __init__.py
 .idea
+# Text backup files
+*.bak
+
+#Database
+*.sqlite3
