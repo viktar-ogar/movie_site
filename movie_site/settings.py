@@ -24,7 +24,7 @@ SECRET_KEY = ')z3v^c-udo15gj8kwflh+s=zszxpyjw$7^*0ys2!)a@m*fhhng'
 #SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', ')z3v^c-udo15gj8kwflh+s=zszxpyjw$7^*0ys2!)a@m*fhhng')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 #DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
 ALLOWED_HOSTS = []
@@ -144,8 +144,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Media folder and url
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-import django_heroku
-
-# Activate Django-Heroku.
-django_heroku.settings(locals())
