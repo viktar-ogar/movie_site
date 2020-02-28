@@ -2,7 +2,6 @@
 *.pot
 *.pyc
 __pycache__
-__init__.py
 .idea
 # Text backup files
 *.bak
