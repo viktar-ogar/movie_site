@@ -102,9 +102,12 @@ class ActorAdmin(admin.ModelAdmin):
     
     ''' Режиссеры и актеры '''
 
-    list_display = ("name", "age", "get_image")
+    list_display = ("name", "age", "get_image", "director")
     list_display_links = ("name", )
     readonly_fields = ("get_image",)
+    #list_editable = ("director", )
+    list_filter = ("director", )
+    search_fields = ("name", )
 
     def get_image(self, obj):
         return mark_safe(f'<img src={obj.image.url} width="50" height="60">')

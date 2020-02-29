@@ -26,6 +26,7 @@ class Actor(models.Model):
     age = models.PositiveSmallIntegerField("Возраст", default=0)
     description = models.TextField("Описание")
     image = models.ImageField("Изображение", upload_to="actor/")
+    director = models.BooleanField("Режиссер", default=False)
 
     def __str__(self):
         return self.name
