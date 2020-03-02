@@ -50,7 +50,7 @@ class MovieAdmin(admin.ModelAdmin):
     
     ''' Фильмы '''
 
-    list_display = ("title", "category", "url", "draft")
+    list_display = ("id", "title", "category", "url", "draft")
     list_filter = ("category", "year")
     search_fields = ("title", "category__name")
     inlines = [MovieShotsInLine, ReviewsInLine]
@@ -58,6 +58,7 @@ class MovieAdmin(admin.ModelAdmin):
     #save_as = True  // Добавляет вместо "Сохранить и добавить новый объект" ---> "Сохранить как новый объект"
     list_editable = ("draft", )
     form = MovieAdminForm
+    actions = ["publish", "unpublish"]
     readonly_fields = ("get_image", )
     fieldsets = (
         (None, {
@@ -86,6 +87,34 @@ class MovieAdmin(admin.ModelAdmin):
 
     def get_image(self, obj):
         return mark_safe(f'<img src={obj.poster.url} width="90" height="110">')
+
+    def unpublish(self, request, queryset):
+        ''' Снять с публикации '''
+        row_update = queryset.update(draft=True)
+        if row_update == 1:
+            message_bit = "1 запись была обновлена"
+        elif 2 <= row_update < 5:
+            message_bit = f"{row_update} записи были обновлены"
+        else:
+            message_bit = f"{row_update} записей были обновлены"
+        self.message_user(request, f"{message_bit}")
+
+    def publish(self, request, queryset):
+        ''' Опубликовать '''
+        row_update = queryset.update(draft=False)
+        if row_update == 1:
+            message_bit = "1 запись была обновлена"
+        elif row_update == 2 or 3 or 3 or 4:
+            message_bit = f"{row_update} записи были обновлены"
+        else:
+            message_bit = f"{row_update} записей были обновлены"
+        self.message_user(request, f"{message_bit}")
+
+    publish.short_description = "Опубликовать"
+    publish.allowed_permission = ("change", )
+
+    unpublish.short_description = "Снять с публикации"
+    unpublish.allowed_permission = ("change", )
 
     get_image.short_description = "Изображение постера"
 

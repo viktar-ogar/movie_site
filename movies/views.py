@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 
-from .models import Movie
+from .models import Movie, Category, Actor
 from .forms import ReviewForm
 
 # OLD VERSION
@@ -15,9 +15,7 @@ from .forms import ReviewForm
 #         return render(request, "movies/movies.html", {'movie_list': movies})
 
 class MoviesView(ListView):
-
     '''Список фильмов'''
-
     model = Movie
     queryset = Movie.objects.filter(draft=False)
     template_name = "movies/movies.html"
@@ -33,18 +31,14 @@ class MoviesView(ListView):
 #         return render(request, "movies/moviesingle.html", {'movie': movie})
 
 class MovieDetailView(DetailView):
-
     '''Подробное описание фильма'''
-
     model = Movie
     slug_field = "url"
     template_name = "movies/moviesingle.html"
 
 
 class AddReview(View):
-
     '''Отзыв'''
-
     def post(self, request, pk):
         form = ReviewForm(request.POST)
         movie = Movie.objects.get(id=pk)
@@ -55,3 +49,10 @@ class AddReview(View):
             form.movie = movie
             form.save()
         return redirect(movie.get_absolute_url())
+
+
+class ActorView(DetailView):
+    '''Отображение информации об актере'''
+    model = Actor
+    template_name = 'movies/actor.html'
+    slug_field = "name"
