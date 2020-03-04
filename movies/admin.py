@@ -16,26 +16,20 @@ class MovieAdminForm(forms.ModelForm):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    
     ''' Категории фильмов '''
-
     list_display = ("id", "name", "url",)
     list_display_links = ("name", )
 
 
 class ReviewsInLine(admin.TabularInline):
-    
     ''' Отзывы на странице фильма '''
-
     model = Reviews
     extra = 1
     readonly_fields = ("name", "email")
 
 
 class MovieShotsInLine(admin.TabularInline):
-
     ''' Кадры из фильма на странице фильма '''
-
     model = MovieShots
     extra = 1
     readonly_fields = ("get_image",)
@@ -47,10 +41,9 @@ class MovieShotsInLine(admin.TabularInline):
 
 
 class MovieAdmin(admin.ModelAdmin):
-    
     ''' Фильмы '''
-
     list_display = ("id", "title", "category", "url", "draft")
+    list_display_links = ("title", )
     list_filter = ("category", "year")
     search_fields = ("title", "category__name")
     inlines = [MovieShotsInLine, ReviewsInLine]
@@ -120,17 +113,13 @@ class MovieAdmin(admin.ModelAdmin):
 
 
 class ReviewsAdmin(admin.ModelAdmin):
-    
     ''' Отзывы '''
-
     list_display = ("name", "email", "parent", "movie", "id")
     readonly_fields = ("name", "email")
 
 
 class ActorAdmin(admin.ModelAdmin):
-    
     ''' Режиссеры и актеры '''
-
     list_display = ("name", "age", "get_image", "director")
     list_display_links = ("name", )
     readonly_fields = ("get_image",)
@@ -145,25 +134,19 @@ class ActorAdmin(admin.ModelAdmin):
 
 
 class GenreAdmin(admin.ModelAdmin):
-    
     ''' Жанры '''
-
     list_display = ("name", "url")
     list_display_links = ("name", )
 
 
 class RatingAdmin(admin.ModelAdmin):
-    
     ''' Рейтинги '''
-
-    list_display = ("movie", "ip")
-    list_display_links = ("movie", )
+    list_display = ("star", "movie", "ip")
+    list_display_links = ("star", "movie")
 
 
 class MovieShotsAdmin(admin.ModelAdmin):
-
     ''' Кадры из фильмов '''
-
     list_display = ("title", "movie", "get_image")
     readonly_fields = ("get_image", )
 

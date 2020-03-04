@@ -3,9 +3,7 @@ from datetime import date
 from django.urls import reverse
 
 class Category(models.Model):
-
     '''Категории'''
-
     name = models.CharField("Категория", max_length=150)
     description = models.TextField("Описание")
     url = models.SlugField(max_length=160, unique=True)
@@ -19,9 +17,7 @@ class Category(models.Model):
 
 
 class Actor(models.Model):
-
     '''Актеры и режиссеры фильмов'''
-
     name = models.CharField("Имя", max_length=100)
     age = models.PositiveSmallIntegerField("Возраст", default=0)
     description = models.TextField("Описание")
@@ -40,9 +36,7 @@ class Actor(models.Model):
 
 
 class Genre(models.Model):
-
     '''Жанры'''
-
     name = models.CharField("Наименование", max_length=100)
     description = models.TextField("Описание")
     url = models.SlugField(max_length=160, unique=True)
@@ -56,9 +50,7 @@ class Genre(models.Model):
 
 
 class Movie(models.Model):
-
     '''Фильм'''
-
     title = models.CharField("Название", max_length=100)
     tagline = models.CharField("Слоган", max_length=100, default='')
     description = models.TextField("Описание")
@@ -97,9 +89,7 @@ class Movie(models.Model):
 
 
 class MovieShots(models.Model):
-
     '''Кадры из фильма'''
-
     title = models.CharField("Заголовок", max_length=100)
     description = models.TextField("Описание")
     image = models.ImageField("Кадр", upload_to="movie_shots/")
@@ -114,23 +104,20 @@ class MovieShots(models.Model):
 
 
 class RatingStar(models.Model):
-
     '''Звезда рейтинга'''
-
     value = models.SmallIntegerField("Значение", default=0)
 
     def __str__(self):
-        return self.value
+        return f'{self.value}'
 
     class Meta:
         verbose_name = "Звезда рейтинга"
         verbose_name_plural = "Звезды рейтинга"
+        ordering = ["-value"]
 
 
 class Rating(models.Model):
-
     '''Рейтинг'''
-
     ip = models.CharField("IP адресс", max_length=20)
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="звезда")
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, verbose_name="фильм")
@@ -144,9 +131,7 @@ class Rating(models.Model):
 
 
 class Reviews(models.Model):
-
     '''Отзывы'''
-
     email = models.EmailField()
     name = models.CharField("Имя", max_length=100)
     text = models.TextField("Сообщение", max_length=5000)

@@ -28,16 +28,16 @@
                     </li>
                     <li>
                         <span><b>Режиссер в фильмах:</b><br>
-                        {% for movie in actor.film_director.all %}
-                            {{ movie.title }}<br>
-                        {% endfor %}
+                            {% for movie in actor.film_director.all %}
+                                {{ movie.title }}<br>
+                            {% endfor %}
                         </span>
                     </li>
                     <li>
                         <span><b>Актер в фильмах:</b><br>
-                        {% for movie in actor.film_actors.all %}
-                            {{ movie.title }}<br>
-                        {% endfor %}
+                            {% for movie in actor.film_actors.all %}
+                                {{ movie.title }}<br>
+                            {% endfor %}
                         </span>
                     </li>
             </div>

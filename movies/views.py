@@ -1,40 +1,40 @@
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
+from django.http import HttpResponse, JsonResponse
+from .models import Movie, Category, Actor, Genre, Rating
+from .forms import ReviewForm, RatingForm
+from django.db.models import Q
 
-from .models import Movie, Category, Actor
-from .forms import ReviewForm
 
-# OLD VERSION
-# class MoviesView(View):
 
-#     '''Список фильмов'''
+class GenreYear:
+    '''Жанры и года выхода фильмов'''
+    def get_genres(self):
+        return Genre.objects.all()
 
-#     def get(self, request):
-#         movies = Movie.objects.all()
-#         return render(request, "movies/movies.html", {'movie_list': movies})
+    def get_years(self):
+        return Movie.objects.filter(draft=False).values("year")
 
-class MoviesView(ListView):
+
+class MoviesView(GenreYear, ListView):
     '''Список фильмов'''
     model = Movie
     queryset = Movie.objects.filter(draft=False)
     template_name = "movies/movies.html"
+    paginate_by = 1
 
 
-# OLD VERSION
-# class MovieDetailView(View):
-
-#     '''Подробное описание фильма'''
-
-#     def get(self, request, slug):
-#         movie = Movie.objects.get(url=slug)
-#         return render(request, "movies/moviesingle.html", {'movie': movie})
-
-class MovieDetailView(DetailView):
+class MovieDetailView(GenreYear, DetailView):
     '''Подробное описание фильма'''
     model = Movie
     slug_field = "url"
     template_name = "movies/moviesingle.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["star_form"] = RatingForm
+        return context
 
 
 class AddReview(View):
@@ -51,8 +51,68 @@ class AddReview(View):
         return redirect(movie.get_absolute_url())
 
 
-class ActorView(DetailView):
+class ActorView(GenreYear, DetailView):
     '''Отображение информации об актере'''
     model = Actor
     template_name = 'movies/actor.html'
     slug_field = "name"
+
+
+class FilterMoviesView(GenreYear, ListView):
+    '''Фильтр фильмов'''
+    template_name = 'movies/movies.html'
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = Movie.objects.filter(
+            # OR
+            Q(year__in=self.request.GET.getlist("year")) |
+            Q(genres__in=self.request.GET.getlist("genre"))
+
+            # AND
+            #year__in=self.request.GET.getlist("year"), genres__in=self.request.GET.getlist("genre")
+        ).distinct()
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["year"] = ''.join([f"year={x}&" for x in self.request.GET.getlist("year")])
+        context["genre"] = ''.join([f"genre={x}&" for x in self.request.GET.getlist("genre")])
+        return context
+
+
+class JsonFilterMoviesView(ListView):
+    '''Фильтр фильмов в JSON'''
+    def get_queryset(self):
+        queryset = Movie.objects.filter(
+            Q(year__in=self.request.GET.getlist("year")) |
+            Q(genres__in=self.request.GET.getlist("genre"))
+        ).distinct().values("title", "tagline", "url", "poster")
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = list(self.get_queryset())
+        return JsonResponse({'movies': queryset}, safe=False)
+
+
+class AddStarRating(View):
+    '''Добавление рейтинга фильму'''
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def post(self, request):
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            Rating.objects.update_or_create(
+                ip = self.get_client_ip(request),
+                movie_id = int(request.POST.get("movie")),
+                defaults = {'star_id': int(request.POST.get("star"))}
+            )
+            return HttpResponse(status=201)
+        else:
+            return HttpResponse(status=400)
