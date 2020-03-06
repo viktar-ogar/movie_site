@@ -1,0 +1,18 @@
+{% extends 'movies/base.html' %}
+
+{% block categories %}
+<div class="row">
+    <div class="desc1-right col-md-10 pl-lg-4">
+        <h1 class="editContent" style="outline: none; cursor: inherit;">
+            {% for category in category_list %}
+                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+            {% endfor %}
+        </h1>
+    </div>
+</div>
+{% endblock categories %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="breadcrumb-item"><a href="/categories/" class="editContent">Категории</a></li>
+{% endblock %}

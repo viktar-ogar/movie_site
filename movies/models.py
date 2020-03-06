@@ -11,6 +11,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('category_detail', kwargs={'slug': self.url})
+
     class Meta:
         verbose_name = "Категория фильмов"
         verbose_name_plural = "Категории фильмов"

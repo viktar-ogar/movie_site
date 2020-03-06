@@ -1,0 +1,49 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+
+{% block title %} {{ actor.name }} {% endblock title %}
+
+{% block container %}
+    <div class="container py-md-3">
+{% endblock container %}
+
+{% block sidebar %}
+    <div class="side-bar col-lg-4">
+{% endblock sidebar %}
+
+{% block movie %}
+    <div class="ml-5">
+        <div class="row">
+            <div>
+                <h1 class="editContent">
+                    {{ category.name }}
+                </h1>
+                <ul>
+                    <li>
+                        <span><b>Описание:</b> {{ category.description }} </span>
+                    </li>
+                    <li>
+                        <span><b>Фильмы в категории:</b><br>
+                            {% for movie in category.movie_set.all %}
+                                <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a><br>
+                            {% endfor %}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row sub-para-w3layouts mt-5">
+            <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
+                Информация о категории {{ category.name }}</h3>
+        </div>
+            <p class="editContent">
+                {{ category.description|safe }}
+            </p>
+        
+    </div>
+{% endblock movie %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="breadcrumb-item"><a href="{{ category.get_absolute_url }}" class="editContent">О категории {{ category.name }}</a></li>
+{% endblock %}

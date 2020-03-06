@@ -22,7 +22,7 @@ class MoviesView(GenreYear, ListView):
     model = Movie
     queryset = Movie.objects.filter(draft=False)
     template_name = "movies/movies.html"
-    paginate_by = 1
+    paginate_by = 4
 
 
 class MovieDetailView(GenreYear, DetailView):
@@ -33,7 +33,8 @@ class MovieDetailView(GenreYear, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["star_form"] = RatingForm
+        context["star_form"] = RatingForm()
+        context["form"] = ReviewForm()
         return context
 
 
@@ -61,7 +62,7 @@ class ActorView(GenreYear, DetailView):
 class FilterMoviesView(GenreYear, ListView):
     '''Фильтр фильмов'''
     template_name = 'movies/movies.html'
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         queryset = Movie.objects.filter(
@@ -116,3 +117,32 @@ class AddStarRating(View):
             return HttpResponse(status=201)
         else:
             return HttpResponse(status=400)
+
+
+class Search(ListView):
+    '''Поиск фильмов'''
+    template_name = "movies/movies.html"
+    paginate_by = 4
+
+    def get_queryset(self):
+        return Movie.objects.filter(title__icontains=self.request.GET.get("q"))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["q"] = f'q={self.request.GET.get("q")}&'
+        return context
+
+
+class CategoriesList(ListView):
+    '''Список категорий'''
+    model = Category
+    template_name = "movies/categories.html"
+    queryset = Category.objects.all()
+    paginate_by = 4
+
+
+class CategoryDetail(DetailView):
+    '''Описание категорий'''
+    model = Category
+    template_name = "movies/category.html"
+    slug_field = "url"

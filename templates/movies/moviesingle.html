@@ -81,38 +81,6 @@
                                     <span class="editContent">{{ movie.rating_set.get.star }}</span>
                                 </form>
                             </li>
-                            <div class="share-desc">
-                                <div class="share">
-                                    <h4 class="editContent"
-                                        style="outline: none; cursor: inherit;">
-                                        Share:
-                                    </h4>
-                                    <ul class="w3layouts_social_list list-unstyled">
-                                        <li>
-                                            <a href="#" class="w3pvt_facebook editContent"
-                                                style="outline: none; cursor: inherit;">
-                                            <span class="fa fa-facebook-f"
-                                                    style="outline: none; cursor: inherit;"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="w3pvt_twitter editContent"
-                                                style="outline: none; cursor: inherit;">
-                                            <span class="fa fa-twitter"
-                                                    style="outline: none; cursor: inherit;"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="w3pvt_dribble editContent"
-                                                style="outline: none; cursor: inherit;">
-                                            <span class="fa fa-dribbble"
-                                                    style="outline: none; cursor: inherit;"></span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
                         </ul>
                     </div>
                 </div>
@@ -144,23 +112,20 @@
                                     <label for="contactcomment" class="editContent">
                                             Ваш комментарий*
                                     </label>
-                                    <textarea class="form-control border" rows="5" name="text"
-                                                id="contactcomment" required=""></textarea>
+                                    {{ form.text }}
                                 </div>
                                 <div class="d-sm-flex">
                                     <div class="col-sm-6 form-group p-0 editContent"
                                         <label for="contactusername" class="editContent">
                                                 Имя*
                                         </label>
-                                        <input type="text" class="form-control border" name="name"
-                                                id="contactusername" required="">
+                                        {{ form.name }}
                                     </div>
                                     <div class="col-sm-6 form-group ml-sm-3 editContent"
                                         <label for="contactemail" class="editContent">
                                                 Email*
                                         </label>
-                                        <input type="email" class="form-control border" name="email"
-                                                id="contactemail" required="">
+                                        {{ form.email }}
                                     </div>
                                 </div>
                                 <button type="submit"
@@ -208,3 +173,7 @@
     </script>
 {% endblock movie %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="breadcrumb-item"><a href="{{ movie.get_absolute_url }}" class="editContent">О фильме {{ movie.title }}</a></li>
+{% endblock %}
