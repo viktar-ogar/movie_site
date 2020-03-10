@@ -1,3 +1,57 @@
-<h2>Login</h2>
-
-<a href="{% url 'register_page' %}">Регистрация</a>
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <!-- //Meta tag Keywords -->
+    <title>Авторизация</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- //Meta tag Keywords -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <!--/ Favicon -->
+    <!-- Custom-Files -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <!-- Bootstrap-Core-CSS -->
+    <!--/ Style-CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all">
+    <!--// Style-CSS -->
+    <!-- font-awesome-icons -->
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+    <!-- //font-awesome-icons -->
+    <!-- /Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900" rel="stylesheet">
+    <!-- //Fonts -->
+</head>
+<body>
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <div>
+            <div style="text-align: center;"><h2>Авторизация</h2><br></div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    Логин<br>
+                    <input type="text" name="username">
+                </div>
+                <div class="form-group">
+                    Пароль<br>
+                    <input type="password" name="password">
+                </div>
+                <div style="text-align: center;">
+                    <p><input type="submit" class="btn btn-primary" name="Create user" value="Войти"></p>
+                    <p>Нет аккаунта? <a href="{% url 'register_page' %}">Регистрация</a></p>
+                    <p><a href="/">На главную</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <p id="messages">
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        </p>
+    </div>
+</body>
+</html>

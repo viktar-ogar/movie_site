@@ -25,13 +25,17 @@
                 </li>
                 <li><a href="{% url 'login_page' %}" style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Вход</a></li>
                 <li><a href="{% url 'register_page' %}" style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Регистрация</a></li>
+                {% if request.user.is_authenticated  %}
+                    <li><span style="color: rgb(255, 255, 255);">Вы вошли как, {{request.user}}</span></li>
+                    <li><a href="{% url 'logout_page' %}" style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Выйти</a></li>    
+                {% endif %}
             </ul>
         </nav>
     </div>
 </header>
 
 <div class="banner-info">
-    <p class="editContent" >Лучший сайт на django 3</p>
+    <p class="editContent">Лучший сайт на <a href="https://www.djangoproject.com/" target="_blunk">django 3</a></p>
     <h3 class="mb-4 editContent">Все о кино</h3>
     <div class="ban-buttons">
     </div>
