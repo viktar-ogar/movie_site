@@ -43,7 +43,7 @@
                             <li>
                                 <span><b>Актеры:</b>
                                     {% for actor in movie.actors.all %}
-                                        <a href="{{ actor.get_absolute_url }}">{{ actor.name }}</a>
+                                        <a href="{{ actor.get_absolute_url }}">{{ actor.name }}</a><br>
                                     {% endfor %}
                                 </span>
                             </li>
@@ -61,7 +61,7 @@
                                 <span><b>Бюджет:</b>$ {{ movie.budget }}</span>
                             </li>
                             <li>
-                                <span><b>Сборы в РФ:</b>₽ {{ movie.fees_in_russia }}</span>
+                                <span><b>Сборы в РФ:</b>$ {{ movie.fees_in_russia }}</span>
                             </li>
                             <li>
                                 <span><b>Сборы в мире:</b>$ {{ movie.fees_in_world }}</span>
